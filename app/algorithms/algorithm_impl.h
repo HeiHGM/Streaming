@@ -204,6 +204,7 @@ class Factory {
                            std::vector<AlgorithmRunInformation>& results) {
     return absl::UnimplementedError("Run is not implemented");
   }
+  virtual std::vector<absl::string_view> GetRegisteredAlgorithms() const = 0;
 };
 class SolutionFactory {
  public:
@@ -217,6 +218,12 @@ class SolutionFactory {
   }
   bool has(absl::string_view name) { return _map.find(name) != _map.end(); }
   Factory* find(absl::string_view name) { return _map[name](); }
+  std::vector<absl::string_view> GetRegisteredAlgorithms(absl::string_view ds_name) {
+    if (has(ds_name)) {
+      return find(ds_name)->GetRegisteredAlgorithms();
+    }
+    return {};
+  }
 
  private:
   SolutionFactory() {}
@@ -282,6 +289,13 @@ class AlgorithmImplFactory : public Factory {
     return absl::NotFoundError(config.algorithm_name() + " is not a valid algo name");
   }
   bool has(absl::string_view name) override { return _map.find(name) != _map.end(); }
+  std::vector<absl::string_view> GetRegisteredAlgorithms() const override {
+    std::vector<absl::string_view> keys;
+    for (const auto& kv : _map) {
+      keys.push_back(kv.first);
+    }
+    return keys;
+  }
 
  private:
   AlgorithmImplFactory() {}

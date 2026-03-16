@@ -20,6 +20,25 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "cli",
+    srcs = [
+        "cli.cc",
+        "//:build-info.h",
+    ],
+    deps = [
+        ":app_io_cc_proto",
+        "//app/algorithms/streaming/matching",
+        "//utils:logging",
+        "//utils:random_lib",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/flags:usage",
+        "@abseil-cpp//absl/strings",
+        "@abseil-cpp//absl/status:statusor",
+    ],
+)
+
 cc_proto_library(
     name = "app_io_cc_proto",
     visibility = ["//visibility:public"],

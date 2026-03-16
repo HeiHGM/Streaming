@@ -2,46 +2,39 @@
 
 heihgm is a program to solve matching  in hypergraphs  in (semi-)streaming fashion.
 
-## Compiling & Running one of computations
+## Compiling & Running one-off computations
 
-We use bazel (https://bazel.build) as build system. For one-off computations run:
+We use Bazel as our build system. We recommend using [Bazelisk](https://github.com/bazelbuild/bazelisk) as a wrapper to automatically download and install the correct Bazel version.
 
+Compile the application:
 ```
-bazel build -c opt app
+bazel build -c opt //app:cli
 ```
-Running
-```
-./bazel-bin/app/app --command_textproto 'command:"run" hypergraph {    file_path: "path/to/hgr"    format: "hgr" } config { algorithm_configs{ data_structure:"<data_structure>" algorithm_name:"<algorithm_name>" }   }' --seed 1234
-```
-Valid `<data_structure>` values are `from_mem_stream_hypergraph` (loading to memory and stream then),`from_disk_stream_hypergraph` (streaming from disk) and `simple_matching` (only `greedy_slim`).
 
-Algorithms for streaming (replace `<algorithm_name>`):
-- `naive` Naive baseline algorithm
-- `greedy_set`  Swap Set algorithm. Params: `double_params{key:"alpha" value:0.5}`
-- `best_evict` SwapSet algorithm with `alpha=best`, needs a second pass.
-- `greedy` Guarantee stack based algorithm Params: `double_params{key:"eps" value:0.5}`
-- `lenient`  Lenient update function. Params: `double_params{key:"eps" value:0.5}`
+### Running with the CLI
 
-Params need to be put in the `algorithm_configs{}` field
-### Gurobi Compile
-
-If you want to use Gurobi
-```
-export GUROBI_HOME=/path/to/gurobi1100/linux64
-bazel build -c opt app --define gurobi=enabled
-```
-Running:
+We provide a  CLI interface for running the hypergraph matching algorithms:
 
 ```
-./bazel-bin/app/app --command_textproto 'command:"run" hypergraph {    file_path: "path/to/hgr"    format: "hgr" } config { algorithm_configs{ data_structure:"simple_matching" algorithm_name:"gurobi_exact" double_params{key:"timeout" value: 3600}}   }' --seed 1234
+./bazel-bin/app/cli --algorithm=greedy --mode=in_memory --hypergraph_file=/path/to/hgr
 ```
+
+**Available Flags:**
+- `--algorithm`: The algorithm to run (e.g., `greedy`, `greedy_set`, `best_evict`, `lenient`).
+- `--mode`: `in_memory` (default) or `from_disk`.
+- `--hypergraph_file` (or `--file`): Path to the hypergraph file.
+- `--seed`: Seed for randomization.
+- `--eps_alpha`: Sets the `eps` and `alpha` parameters for algorithms that require them (e.g., `greedy`, `greedy_set`, `lenient`).
+
+Run `./bazel-bin/app/cli --help` to see all available algorithms for the selected mode dynamically.
+
 
 ## Running experiments
 
 ### Compile
 
 ```
-bazel build -c opt runner:fork_runner # --define gurobi=enabled # optional for gurobi
+bazel build -c opt runner:fork_runner 
 ```
 
 ### Running
@@ -62,4 +55,29 @@ spack install
 ```
 spack env activate .
 bazel run -c opt tools/plot:plot_cc /absolute/path/to/results/folder /absolute/path/to/visualisation.textproto 
+```
+
+## Citation
+
+If you use this software in your research, please cite our paper [Semi-Streaming Algorithms for Hypergraph Matching](https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESA.2025.79):
+
+```bibtex
+@InProceedings{reinstadtler_et_al:LIPIcs.ESA.2025.79,
+  author =	{Reinst\"{a}dtler, Henrik and Ferdous, S M and Pothen, Alex and U\c{c}ar, Bora and Schulz, Christian},
+  title =	{{Semi-Streaming Algorithms for Hypergraph Matching}},
+  booktitle =	{33rd Annual European Symposium on Algorithms (ESA 2025)},
+  pages =	{79:1--79:19},
+  series =	{Leibniz International Proceedings in Informatics (LIPIcs)},
+  ISBN =	{978-3-95977-395-9},
+  ISSN =	{1868-8969},
+  year =	{2025},
+  volume =	{351},
+  editor =	{Benoit, Anne and Kaplan, Haim and Wild, Sebastian and Herman, Grzegorz},
+  publisher =	{Schloss Dagstuhl -- Leibniz-Zentrum f{\"u}r Informatik},
+  address =	{Dagstuhl, Germany},
+  URL =		{https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESA.2025.79},
+  URN =		{urn:nbn:de:0030-drops-245478},
+  doi =		{10.4230/LIPIcs.ESA.2025.79},
+  annote =	{Keywords: hypergraph, matching, semi-streaming}
+}
 ```
