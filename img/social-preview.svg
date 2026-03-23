@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0d0d1a"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="he-glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="stream-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#64748b" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#64748b" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- === Stream of hyperedges arriving from left === -->
+  <line x1="20" y1="320" x2="130" y2="320" stroke="url(#stream-fade)" stroke-width="2"/>
+  <polygon points="127,314 140,320 127,326" fill="#64748b" opacity="0.5"/>
+  <text x="80" y="295" text-anchor="middle" font-family="'DejaVu Sans', sans-serif" font-size="13" fill="#546e7a">stream</text>
+
+  <!-- Queued hyperedge blobs (arriving) -->
+  <ellipse cx="40" cy="320" rx="18" ry="24" fill="none" stroke="#546e7a" stroke-width="1" stroke-dasharray="3 3" opacity="0.2"/>
+  <ellipse cx="75" cy="320" rx="20" ry="26" fill="none" stroke="#546e7a" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.3"/>
+  <ellipse cx="115" cy="320" rx="22" ry="28" fill="#a78bfa" fill-opacity="0.06" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.45"/>
+
+  <!-- === Hypergraph: vertices as dots, hyperedges as blobs === -->
+  <!-- Vertices laid out cleanly -->
+  <!-- V1(230,110) V2(350,90) V3(480,130) V4(200,260) V5(340,240)
+       V6(470,280) V7(230,420) V8(370,440) V9(510,400) V10(300,540) -->
+
+  <!-- MATCHED hyperedge A (teal, solid stroke, glowing): V1, V2, V5 -->
+  <path d="M 190,70 Q 310,40 400,70 Q 410,170 380,280 Q 310,290 220,250 Q 170,170 190,70 Z"
+        fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-width="2.5" stroke-opacity="0.5" filter="url(#he-glow)"/>
+
+  <!-- FREE hyperedge B (purple, dashed): V2, V3, V6 — shares V2 with A -->
+  <path d="M 310,50 Q 440,40 520,100 Q 530,230 510,320 Q 430,320 350,260 Q 290,170 310,50 Z"
+        fill="#a78bfa" fill-opacity="0.06" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="7 4" stroke-opacity="0.25"/>
+
+  <!-- MATCHED hyperedge C (rose, solid, glowing): V7, V8, V10 -->
+  <path d="M 185,380 Q 300,370 415,400 Q 420,490 350,580 Q 270,590 200,540 Q 160,470 185,380 Z"
+        fill="#f43f5e" fill-opacity="0.12" stroke="#f43f5e" stroke-width="2.5" stroke-opacity="0.5" filter="url(#he-glow)"/>
+
+  <!-- FREE hyperedge D (amber, dashed): V4, V5, V7 — shares V5 with A, V7 with C -->
+  <path d="M 155,220 Q 260,180 385,210 Q 370,330 280,460 Q 190,460 140,370 Q 130,290 155,220 Z"
+        fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="7 4" stroke-opacity="0.25"/>
+
+  <!-- MATCHED hyperedge E (sky, solid, glowing): V6, V9 -->
+  <path d="M 430,240 Q 530,230 560,340 Q 550,440 490,450 Q 420,430 410,340 Q 415,270 430,240 Z"
+        fill="#38bdf8" fill-opacity="0.12" stroke="#38bdf8" stroke-width="2.5" stroke-opacity="0.5" filter="url(#he-glow)"/>
+
+  <!-- FREE hyperedge F (gray, dashed): V8, V9 — shares V9 with E -->
+  <path d="M 330,400 Q 430,380 550,390 Q 560,450 510,470 Q 400,490 340,470 Q 310,440 330,400 Z"
+        fill="#64748b" fill-opacity="0.04" stroke="#64748b" stroke-width="1.2" stroke-dasharray="6 4" stroke-opacity="0.2"/>
+
+  <!-- Vertices: matched ones are bright, free ones are dim -->
+  <!-- In matched HE A: V1, V2, V5 -->
+  <circle cx="230" cy="110" r="12" fill="#10b981" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="350" cy="90"  r="12" fill="#10b981" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="340" cy="240" r="12" fill="#10b981" opacity="0.9" filter="url(#glow)"/>
+
+  <!-- In matched HE C: V7, V8, V10 -->
+  <circle cx="230" cy="420" r="12" fill="#f43f5e" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="370" cy="440" r="12" fill="#f43f5e" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="300" cy="540" r="12" fill="#f43f5e" opacity="0.9" filter="url(#glow)"/>
+
+  <!-- In matched HE E: V6, V9 -->
+  <circle cx="470" cy="280" r="12" fill="#38bdf8" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="510" cy="400" r="12" fill="#38bdf8" opacity="0.9" filter="url(#glow)"/>
+
+  <!-- Free vertices (dim gray): V3, V4 -->
+  <circle cx="480" cy="130" r="10" fill="#64748b" opacity="0.5"/>
+  <circle cx="200" cy="260" r="10" fill="#64748b" opacity="0.5"/>
+
+  <!-- Checkmarks on matched hyperedges -->
+  <text x="300" y="175" text-anchor="middle" font-family="'DejaVu Sans', sans-serif" font-size="20" fill="#10b981" opacity="0.5">&#x2713;</text>
+  <text x="310" y="470" text-anchor="middle" font-family="'DejaVu Sans', sans-serif" font-size="20" fill="#f43f5e" opacity="0.5">&#x2713;</text>
+  <text x="490" y="350" text-anchor="middle" font-family="'DejaVu Sans', sans-serif" font-size="20" fill="#38bdf8" opacity="0.5">&#x2713;</text>
+
+  <!-- === TEXT === -->
+  <text x="660" y="190" font-family="'DejaVu Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="72" font-weight="700" fill="#f8fafc" letter-spacing="1">
+    HeiHGM
+  </text>
+  <text x="660" y="248" font-family="'DejaVu Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="50" font-weight="700" fill="#38bdf8" letter-spacing="1">
+    Streaming
+  </text>
+
+  <line x1="660" y1="272" x2="1220" y2="272" stroke="#334155" stroke-width="2"/>
+
+  <text x="660" y="312" font-family="'DejaVu Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="24" fill="#94a3b8">
+    Semi-Streaming Hypergraph Matching
+  </text>
+
+  <text x="660" y="370" font-family="'DejaVu Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#607d8b">
+    Semi-streaming algorithms for the
+  </text>
+  <text x="660" y="398" font-family="'DejaVu Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#607d8b">
+    hypergraph matching problem
+  </text>
+
+  <rect x="660" y="435" width="155" height="30" rx="15" fill="#263238"/>
+  <text x="737" y="455" font-family="'DejaVu Sans', sans-serif" font-size="14" fill="#80cbc4" text-anchor="middle">Part of HeiHGM</text>
+
+  <!-- Legend -->
+  <g transform="translate(660, 520)">
+    <path d="M 0,2 Q 15,-2 30,5 Q 28,16 15,18 Q 2,15 0,2 Z" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2" stroke-opacity="0.5"/>
+    <text x="38" y="15" font-family="'DejaVu Sans', sans-serif" font-size="15" fill="#94a3b8">matched HE</text>
+
+    <path d="M 170,2 Q 185,-2 200,5 Q 198,16 185,18 Q 172,15 170,2 Z" fill="#a78bfa" fill-opacity="0.08" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4 2" stroke-opacity="0.3"/>
+    <text x="208" y="15" font-family="'DejaVu Sans', sans-serif" font-size="15" fill="#94a3b8">free HE</text>
+
+    <circle cx="320" cy="10" r="6" fill="#10b981" opacity="0.8"/>
+    <text x="332" y="15" font-family="'DejaVu Sans', sans-serif" font-size="15" fill="#94a3b8">matched vertex</text>
+
+    <circle cx="480" cy="10" r="5" fill="#64748b" opacity="0.5"/>
+    <text x="492" y="15" font-family="'DejaVu Sans', sans-serif" font-size="15" fill="#94a3b8">free vertex</text>
+  </g>
+</svg>
